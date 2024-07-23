@@ -1,0 +1,25 @@
+apiVersion: kpt.dev/v1
+kind: Kptfile
+metadata:
+  name: ngnix-pkg
+  annotations:
+    config.kubernetes.io/local-config: "true"
+    color: orange
+info:
+  description: sample description
+pipeline:
+  mutators:
+    - image: gcr.io/kpt-fn/set-namespace:v0.4.1
+      configMap:
+        namespace: default
+    - image: gcr.io/kpt-fn/set-annotations:v0.1.4
+      configMap:
+        color: orange
+    - image: gcr.io/kpt-fn/set-annotations:v0.1.4
+      configMap:
+        app: nginx
+      selectors:
+        - kind: Deployment
+    - image: shashidharpatil/set-replicas:v4
+      configMap:
+        replicas: 3
